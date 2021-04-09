@@ -14,8 +14,8 @@
 #define WIDTH    697 
 #define HIEIGHT  600 
 
-#define OUTSKIRTWIDTH 40
-#define OUTSKIRTHEIGH 40
+#define OUTSKIRTWIDTH 20
+#define OUTSKIRTHEIGH 20
 
 LPCTSTR szTitle = TEXT("贪食蛇游戏 —— by 喵喵");	// 标题栏文本
 LPCTSTR szWindowClass = TEXT("Snake");			    // 主窗口类名
