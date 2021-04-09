@@ -11,11 +11,11 @@
 #pragma comment(lib, "kernel32")
 #pragma comment(lib, "gdi32")
 
-#define WIDTH    690 
+#define WIDTH    697 
 #define HIEIGHT  600 
 
-#define OUTSKIRTWIDTH 16
-#define OUTSKIRTHEIGH 14
+#define OUTSKIRTWIDTH 40
+#define OUTSKIRTHEIGH 40
 
 LPCTSTR szTitle = TEXT("贪食蛇游戏 —— by 喵喵");	// 标题栏文本
 LPCTSTR szWindowClass = TEXT("Snake");			    // 主窗口类名
@@ -73,6 +73,7 @@ DWORD WINAPI Moni(LPVOID lparam)
                 InitGame();
                 nMoveTime = 1000;
                 nScore = 0;
+                nCount = 0;
             }
             if ((element&SNAKE_FOOD_MASK) == SNAKE_FOOD_MASK)
             {
@@ -145,9 +146,19 @@ LRESULT CALLBACK MyPaint(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         TextOut(hMemoryDC, 5, 25, buf, _tcslen(buf));
     }
 
-    // 循环画圆 
     int WidthPer = SceneWidth/OUTSKIRTWIDTH;
     int HeightPer = SceneHeight/OUTSKIRTHEIGH;
+
+    // 画外框 
+    HPEN hPen = CreatePen(PS_SOLID,0,RGB(0,0,0));  // 黑色笔  
+    MoveToEx(hMemoryDC, 0, 0, NULL);
+    LineTo(hMemoryDC, 0, HeightPer*OUTSKIRTHEIGH);
+    LineTo(hMemoryDC, WidthPer*OUTSKIRTWIDTH, HeightPer*OUTSKIRTHEIGH);
+    LineTo(hMemoryDC, WidthPer*OUTSKIRTWIDTH, 0);
+    LineTo(hMemoryDC, 0, 0);
+    DeleteObject(hPen);
+
+    // 循环画圆 
     SnakeElement* snake = GetSnakeState();
     if (snake)
     {
