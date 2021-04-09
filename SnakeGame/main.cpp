@@ -1,6 +1,6 @@
 // 例子模拟系统.cpp : 定义应用程序的入口点。
 //
-
+#include "resource.h"
 #include <windows.h>
 #include <tchar.h>
 #include <time.h>
@@ -361,7 +361,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
     srand(time(NULL));    
 
-    hImageBitmap = (HBITMAP)LoadImage(hInstance, TEXT("D:\\flower.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+//     hImageBitmap = (HBITMAP)LoadImage(hInstance, TEXT("D:\\flower.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+    hImageBitmap = LoadBitmap(hInstance, MAKEINTRESOURCE(IDC_FLOWER));
     MyRegisterClass(hInstance);
     if (!InitInstance (hInstance, nCmdShow))
     {
@@ -375,5 +376,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
         DispatchMessage(&msg);
     }
 
+    DeleteObject(hImageBitmap);
     return (int) msg.wParam;
 }
