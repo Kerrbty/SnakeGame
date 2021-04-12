@@ -11,10 +11,10 @@
 #pragma comment(lib, "kernel32")
 #pragma comment(lib, "gdi32")
 
-#define WIDTH    697 
+#define WIDTH    690 
 #define HIEIGHT  600 
 
-#define OUTSKIRTWIDTH 20
+#define OUTSKIRTWIDTH 24
 #define OUTSKIRTHEIGH 20
 
 LPCTSTR szTitle = TEXT("贪食蛇游戏 —— by 喵喵");	// 标题栏文本
@@ -28,9 +28,16 @@ int nScore;  // 当前分值
 BOOL nButtonFlags = FALSE;
 HBITMAP hImageBitmap;
 
+static void InitData()
+{
+    // 初始化数据 
+    nMoveTime = 1000;
+    nScore = 0;
+    InitGame();
+}
 
 // 不断的计算时间，画图消息  
-DWORD WINAPI Moni(LPVOID lparam)
+static DWORD WINAPI Moni(LPVOID lparam)
 {
     HWND hWnd = (HWND)lparam;
     LARGE_INTEGER TimeFreq, LastTime, ThisTime;
@@ -43,10 +50,9 @@ DWORD WINAPI Moni(LPVOID lparam)
     LastTime = ThisTime;
     Timetms = GetTickCount();
 
-    nScore = 0;
-    nMoveTime = 1000; // 初始速度1s一次 
     SetOutskirtLimit(OUTSKIRTWIDTH, OUTSKIRTHEIGH);
-    InitGame();
+    nCount = 0;
+    InitData();
     do {
         LastTime = ThisTime;
 
@@ -68,12 +74,10 @@ DWORD WINAPI Moni(LPVOID lparam)
             if( MoveSnake(&element) != GAME_NORMAL)
             {
                 MessageBox(hWnd, TEXT("游戏结束,将重新开始游戏"), TEXT("提示"), MB_OK);
-
-                // 重新开始
-                InitGame();
-                nMoveTime = 1000;
-                nScore = 0;
+                
+                // 重新开始游戏 
                 nCount = 0;
+                InitData();
             }
             if ((element&SNAKE_FOOD_MASK) == SNAKE_FOOD_MASK)
             {
@@ -113,7 +117,7 @@ DWORD WINAPI Moni(LPVOID lparam)
 }
 
 // 绘图函数 
-LRESULT CALLBACK MyPaint(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+static LRESULT CALLBACK MyPaint(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     HDC hdc;
     RECT Rect;
@@ -174,7 +178,7 @@ LRESULT CALLBACK MyPaint(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     HBRUSH hBrush = CreateSolidBrush(RGB(0,0,0));  // 物体颜色 
                     SelectObject(hMemoryDC, hPen);  
                     SelectObject(hMemoryDC, hBrush); 
-                    // 单独话蛇头好像有点丑，哈哈哈哈 
+                    // 单独画蛇头好像有点丑，哈哈哈哈 
                     if ( (tmp^SNAKE_BODY_MASK) == 0)
                     {
                         RoundRect(hMemoryDC, WidthPer*x + 2, HeightPer*y + 2, WidthPer*(x+1) - 2, HeightPer*(y+1) - 2, WidthPer/3, HeightPer/3); 
@@ -201,7 +205,7 @@ LRESULT CALLBACK MyPaint(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     }
                     else if (tmp == SNAKE_REWARD)
                     {
-                        // 奖励小红花 
+                        // 奖励小红花(贴图) 
                         BITMAP bitmap;
                         HDC hBitmapDc = CreateCompatibleDC(hdc);
                         SelectObject(hBitmapDc, hImageBitmap); 
@@ -231,7 +235,7 @@ LRESULT CALLBACK MyPaint(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 // message loop 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
@@ -303,7 +307,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 // register window class 
-ATOM MyRegisterClass(HINSTANCE hInstance)
+static ATOM MyRegisterClass(HINSTANCE hInstance)
 {
     WNDCLASSEX wcex;
 
@@ -329,7 +333,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 }
 
 // Create and show Window
-BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
+static BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
     HWND hWnd;
 
