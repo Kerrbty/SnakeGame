@@ -43,6 +43,7 @@ int InitGame();
 
 // 设置移动方向 
 void SetMoveDirection(MoveDirection direction);
+MoveDirection GetMoveDirection();
 
 // 蛇移动一步，并返回是否结束游戏(foodid 是否吃到某种食物) 
 int MoveSnake(SnakeElement* foodid);

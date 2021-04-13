@@ -94,6 +94,11 @@ void SetMoveDirection(MoveDirection direction)
     gsnake.direction = direction;
 }
 
+MoveDirection GetMoveDirection()
+{
+    return gsnake.direction;
+}
+
 // 蛇移动一步，并返回是否结束游戏(foodid 是否吃到某种食物) 
 int MoveSnake(SnakeElement* foodid)
 {

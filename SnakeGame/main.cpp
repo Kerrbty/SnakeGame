@@ -181,7 +181,54 @@ static LRESULT CALLBACK MyPaint(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                     // 单独画蛇头好像有点丑，哈哈哈哈 
                     if ( (tmp^SNAKE_BODY_MASK) == 0)
                     {
+                        MoveDirection direction = GetMoveDirection();
                         RoundRect(hMemoryDC, WidthPer*x + 2, HeightPer*y + 2, WidthPer*(x+1) - 2, HeightPer*(y+1) - 2, WidthPer/3, HeightPer/3); 
+
+                        HPEN hPen = CreatePen(PS_SOLID,0,RGB(255,255,255));  // 图形边界颜色，黑色 
+                        HBRUSH hBrush = CreateSolidBrush(RGB(255,255,255));  // 物体颜色 
+                        SelectObject(hMemoryDC, hPen);  
+                        SelectObject(hMemoryDC, hBrush); 
+                        switch (direction)
+                        {
+                        case SNAKE_UP:
+                            {
+                                int x1 = WidthPer*x + WidthPer/4 + 2;
+                                int x2 = WidthPer*x + WidthPer*3/4 - 2;
+                                int y1 = HeightPer*y + HeightPer/4;
+                                Ellipse(hMemoryDC, x1 - WidthPer/4 + 3, y1 - HeightPer/4 + 3, x1 + WidthPer/4 - 3, y1 + HeightPer/4 - 3);
+                                Ellipse(hMemoryDC, x2 - WidthPer/4 + 3, y1 - HeightPer/4 + 3, x2 + WidthPer/4 - 3, y1 + HeightPer/4 - 3);
+                            }
+                            break;
+                        case SNAKE_DOWN:
+                            {
+                                int x1 = WidthPer*x + WidthPer/4 + 2;
+                                int x2 = WidthPer*x + WidthPer*3/4 - 2;
+                                int y1 = HeightPer*y + HeightPer*3/4;
+                                Ellipse(hMemoryDC, x1 - WidthPer/4 + 3, y1 - HeightPer/4 + 3, x1 + WidthPer/4 - 3, y1 + HeightPer/4 - 3);
+                                Ellipse(hMemoryDC, x2 - WidthPer/4 + 3, y1 - HeightPer/4 + 3, x2 + WidthPer/4 - 3, y1 + HeightPer/4 - 3);
+                            }
+                            break;
+                        case SNAKE_LEFT:
+                            {
+                                int x1 = WidthPer*x + WidthPer/4;
+                                int y1 = HeightPer*y + HeightPer/4 + 2;
+                                int y2 = HeightPer*y + HeightPer*3/4 - 2;
+                                Ellipse(hMemoryDC, x1 - WidthPer/4 + 3, y1 - HeightPer/4 + 3, x1 + WidthPer/4 - 3, y1 + HeightPer/4 - 3);
+                                Ellipse(hMemoryDC, x1 - WidthPer/4 + 3, y2 - HeightPer/4 + 3, x1 + WidthPer/4 - 3, y2 + HeightPer/4 - 3);
+                            }
+                            break;
+                        case SNAKE_RIGHT:
+                            {
+                                int x1 = WidthPer*x + WidthPer*3/4;
+                                int y1 = HeightPer*y + HeightPer/4 + 2;
+                                int y2 = HeightPer*y + HeightPer*3/4 - 2;
+                                Ellipse(hMemoryDC, x1 - WidthPer/4 + 3, y1 - HeightPer/4 + 3, x1 + WidthPer/4 - 3, y1 + HeightPer/4 - 3);
+                                Ellipse(hMemoryDC, x1 - WidthPer/4 + 3, y2 - HeightPer/4 + 3, x1 + WidthPer/4 - 3, y2 + HeightPer/4 - 3);
+                            }
+                            break;
+                        }
+                        DeleteObject(hPen);
+                        DeleteObject(hBrush);
                     }
                     else
                     {

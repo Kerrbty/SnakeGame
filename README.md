@@ -9,6 +9,9 @@
 
 ![avatar](sample/game.png)
 
+  画上眼睛
+
+![avatar](sample/game2.png)
 
 
 ## 后续改进
